@@ -1,0 +1,19 @@
+[package]
+name = "remite-background"
+version = "0.1.0"
+authors = ["Karl Grasegger <karl.grasegger@gebruederheitz.de>"]
+edition = "2018"
+
+[profile.release]
+opt-level = "z"
+lto = true
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
+
+[dependencies.web-sys]
+version = "0.3"
+features = [ "console" ]
