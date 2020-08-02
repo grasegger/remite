@@ -1,0 +1,20 @@
+[package]
+name = "settings"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+wasm-bindgen-futures = "0.4.17"
+js-sys = "0.3.44"
+serde_json = "1.0.57"
+
+[dependencies.wasm-bindgen]
+version = "0.2"
+features = ["serde-serialize"]
+
+[dependencies.web-sys]
+version = "0.3"
+
+[dependencies.serde]
+version = "1.0"
+features = ["derive"]

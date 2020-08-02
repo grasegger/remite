@@ -1,12 +1,14 @@
 use wasm_bindgen::prelude::*;
 use web_sys::console;
+use settings;
+use serde_json::json;
 
 #[wasm_bindgen(start)]
-pub fn main() -> Result<(), JsValue> {
-    console::log_1(&JsValue::from_str("World"));
-    Ok(())
-}
+pub async fn main() -> Result<(), JsValue>{
+    let test_data = JsValue::from_serde(&json!({"abc": "def"})).unwrap();
+    settings::set(&test_data).await.unwrap();
 
-pub fn greet(name: &str) {
-    console::debug_1(&JsValue::from_str(&format!("Hello, {}!", name)));
+    let result = settings::get().await;
+    console::log_1(&format!("{:?}", result).into());
+    Ok(())
 }
