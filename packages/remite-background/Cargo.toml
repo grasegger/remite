@@ -16,8 +16,8 @@ wasm-bindgen-futures = "0.4"
 js-sys = "0.3"
 serde_json = "1.0"
 
-[dependencies.settings]
-path = "../js-settings"
+[dependencies.browser_storage_sync]
+path = "../browser-storage-sync"
 
 [dependencies.serde]
 version = "1.0"

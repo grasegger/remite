@@ -1,6 +1,6 @@
 use wasm_bindgen::prelude::*;
 use web_sys::console;
-use settings;
+use browser_storage_sync as settings;
 
 #[wasm_bindgen(start)]
 pub async fn main() -> Result<(), JsValue>{
