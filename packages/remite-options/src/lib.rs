@@ -4,6 +4,10 @@ use yew::web_sys::console;
 use yew::web_sys::window;
 use yew::MouseEvent;
 
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
+
 struct Model {
     link: ComponentLink<Self>,
     mite_instance: String,
