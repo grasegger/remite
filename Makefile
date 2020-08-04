@@ -21,5 +21,5 @@ clean:
 	cd build && git clean -fxd
 
 packages: clean
-	wasm-pack build --target no-modules --no-typescript  --release -d build/background/ --out-name background packages/remite-background
-	wasm-pack build --target no-modules --no-typescript  --release -d build/options/ --out-name options packages/remite-options
+	wasm-pack build --target no-modules --no-typescript  --release -d ../../build/background/ --out-name background packages/remite-background
+	wasm-pack build --target no-modules --no-typescript  --release -d ../../build/options/ --out-name options packages/remite-options
