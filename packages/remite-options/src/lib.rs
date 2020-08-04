@@ -46,8 +46,8 @@ impl Component for Model {
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
-            Msg::ClickSave (MouseEvent) => {
-			    MouseEvent.prevent_default();
+            Msg::ClickSave (mouse_event) => {
+			    mouse_event.prevent_default();
 			    self.save_changes()
 		    }
         }
