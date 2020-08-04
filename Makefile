@@ -1,5 +1,5 @@
 SHELL = /bin/bash
-.PHONY: extension dockershell structure in-docker Dockerfile
+.PHONY: extension dockershell structure in-docker Dockerfile package.json
 
 extension: packages package.json clean
 	cargo build
