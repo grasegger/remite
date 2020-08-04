@@ -49,8 +49,8 @@ background:
   #default_title: Remite
   #default_popup: popup/remite.html
 
-#web_accessible_resources:
-#- ./options/options_bg.wasm
+web_accessible_resources:
+  - lib/*
 
 options_ui:
  page: options/options.html

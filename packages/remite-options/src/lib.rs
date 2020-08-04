@@ -1,6 +1,8 @@
 use yew::prelude::*;
 use wasm_bindgen::prelude::*;
 use yew::web_sys::console;
+use yew::web_sys::window;
+use yew::MouseEvent;
 
 struct Model {
     link: ComponentLink<Self>,
@@ -9,12 +11,19 @@ struct Model {
 }
 
 enum Msg {
-    ClickSave,
+    ClickSave(MouseEvent),
 }
 
 impl Model {
     fn save_changes(&mut self) {
+        let document = window().unwrap().document().unwrap();
+
+        let instance_element = document.query_selector("input#instanceField").unwrap().unwrap();
+        let instance_attributes = instance_element;
+        console::log_1(&format!("{:?}", instance_attributes).into());
         console::log_1(&"Saving changes.".into());
+        console::log_1(&self.mite_api_key.clone().into());
+        console::log_1(&self.mite_instance.clone().into());
     }
 }
 
@@ -33,7 +42,10 @@ impl Component for Model {
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
-            Msg::ClickSave => self.save_changes()
+            Msg::ClickSave (MouseEvent) => {
+			    MouseEvent.prevent_default();
+			    self.save_changes()
+		    }
         }
         true
     }
@@ -44,8 +56,18 @@ impl Component for Model {
 
     fn view(&self) -> Html {
         html! {
-            <div>
-                <button onclick=self.link.callback(|_| Msg::ClickSave)>{ "+1" }</button>
+            <div class="container" style="padding-top: 1rem">
+                <form>
+                    <fieldset>
+                        <label for="instanceField">{"Your mite instance."}</label>
+                        <input type="text" id="instanceField" />
+                        
+                        <label for="instanceField">{"Your mite api key."}</label>
+                        <input type="text" id="apiKeyField" />
+
+                        <button onclick=self.link.callback(|event| Msg::ClickSave(event))>{ "Save" }</button>
+                    </fieldset>
+                </form>
             </div>
         }
     }
