@@ -3,13 +3,9 @@ FROM ubuntu:latest
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends libcatmandu-perl \
-                                               jq \
-                                               npm \
+    apt-get install -y --no-install-recommends npm \
                                                curl \
                                                build-essential \
-                                               imagemagick \
-                                               librsvg2-bin \
                                                pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
