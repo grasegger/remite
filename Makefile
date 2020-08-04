@@ -1,5 +1,5 @@
 SHELL = /bin/bash
-.PHONY: extension dockershell structure in-docker
+.PHONY: extension dockershell structure in-docker Dockerfile
 
 extension: packages package.json clean
 	cargo build
@@ -20,7 +20,7 @@ Dockerfile:
 	docker build -t remite .
 
 in-docker: Dockerfile
-	docker run --rm -it -v ${shell pwd}:/src remite make extension
+	docker run --rm -it -v ${shell pwd}:/src remite bash -c ". ~/.cargo/env; make extension"
 
 dockershell:
 	docker run --rm -it -v ${shell pwd}:/src remite bash
