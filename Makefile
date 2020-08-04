@@ -1,7 +1,8 @@
 SHELL = /bin/bash
 .PHONY: extension dockershell structure in-docker
 
-extension: src/manifest.yaml packages icons package.json
+extension: packages icons package.json
+	cargo build
 	cp node_modules/milligram/dist/milligram.min.css build/lib/milligram.css
 
 in-docker:
@@ -20,8 +21,6 @@ structure:
 	mkdir -p build/lib
 # tood use git delete 
 
-src/manifest.yaml: structure
-	catmandu convert YAML < manifest.yaml | jq .[0] > build/manifest.json
 
 packages: structure
 	source ~/.cargo/env && cd packages/remite-background && wasm-pack build --target no-modules --no-typescript  --release -d "../../build/background/" --out-name background

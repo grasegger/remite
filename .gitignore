@@ -3,3 +3,7 @@
 build/
 .vscode/
 !build/**/loader.js
+
+#Added by cargo
+
+/target
