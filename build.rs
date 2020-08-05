@@ -1,10 +1,50 @@
 use serde_yaml::Value;
 use std::fs::File;
 use std::io::prelude::*;
+use std::path::PathBuf;
+use wasm_pack::command::build::*;
+use std::process::Command;
+use std::fs;
 
 fn main() {
+    npm_dependencies();
+    milligram();
+    packages();
     manifest().ok();
     icons();
+}
+
+fn milligram () {
+    fs::copy("node_modules/milligram/dist/milligram.min.css", "build/lib/milligram.css").unwrap();
+}
+
+fn packages() {
+    package("background");
+    package("options");
+}
+
+fn npm_dependencies() {
+    Command::new("sh")
+            .arg("-c")
+            .arg("npm i")
+            .output()
+            .expect("failed to execute process");
+}
+
+fn package(package_name: &str) {
+    let options = BuildOptions {
+        disable_dts: true,
+        target: Target::NoModules,
+        out_dir: format!("../../build/{}", package_name),
+        out_name: Some(package_name.to_string()),
+        path: Some(PathBuf::from(format!("packages/remite-{}", package_name))),
+        dev: cfg!(debug_assertions),
+        release: !cfg!(debug_assertions),
+        ..Default::default()
+    };
+
+    let mut build = Build::try_from_opts(options).unwrap();
+    build.run().expect("Was not able to build.");
 }
 
 fn manifest() -> std::io::Result<()> {
@@ -37,7 +77,9 @@ fn to_png(size: u32) {
 }
 
 fn invert_png(size: u32) {
-        let mut original = image::open(format!("build/icons/remite-{}.png", size)).unwrap();
-        original.invert();
-        original.save(format!("build/icons/remite-{}-light.png", size)).unwrap();
+    let mut original = image::open(format!("build/icons/remite-{}.png", size)).unwrap();
+    original.invert();
+    original
+        .save(format!("build/icons/remite-{}-light.png", size))
+        .unwrap();
 }
