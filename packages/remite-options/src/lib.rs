@@ -4,8 +4,6 @@ use yew::web_sys::console;
 use yew::web_sys::HtmlInputElement;
 use yew::MouseEvent;
 use browser_storage_sync as settings;
-use futures::executor::LocalPool;
-use futures::task::LocalSpawnExt;
 
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
@@ -25,22 +23,12 @@ enum Msg {
 
 impl Model {
     fn save_changes(&mut self) {
-        console::log_1(&"Saving changes.".into());
         let instance = self.instance_ref
             .cast::<HtmlInputElement>()
             .unwrap()
             .value();
 
-        let mut executor = LocalPool::new();
-        let spawner = executor.spawner();
-
-        let future = async move {
-            settings::set_string("instance", &instance.clone()).await.unwrap();
-        };
-
-        spawner.spawn_local(future).unwrap();
-
-        executor.run();
+        settings::Sync::set_string("instance", &instance);
 
         let api_key = self.apikey_ref
             .cast::<HtmlInputElement>()
