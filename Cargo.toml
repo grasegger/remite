@@ -3,7 +3,6 @@ name = "remite"
 version = "0.1.0"
 authors = ["Karl Grasegger <51945878+grasegger@users.noreply.github.com>"]
 edition = "2018"
-build = "build.rs"
 
 [build-dependencies]
 serde = "1.0"

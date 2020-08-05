@@ -5,7 +5,7 @@ debug: clean
 	cargo build -vv
  
 release: clean
-	cargo build -vv --release
+	cargo build -v --release
 
 clean:
 	cargo clean -p remite
