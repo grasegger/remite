@@ -6,12 +6,10 @@ use yew::MouseEvent;
 use browser_storage_sync as settings;
 use futures::executor::LocalPool;
 use futures::task::LocalSpawnExt;
-use std::panic;
 
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-console_error_panic_hook::set_once();
 
 struct Model {
     link: ComponentLink<Self>,
@@ -102,5 +100,6 @@ impl Component for Model {
 
 #[wasm_bindgen(start)]
 pub fn run_app() {
+    console_error_panic_hook::set_once();
     App::<Model>::new().mount_to_body();
 }
