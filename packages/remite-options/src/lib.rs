@@ -34,9 +34,8 @@ impl Model {
             .cast::<HtmlInputElement>()
             .unwrap()
             .value();
-
         
-
+        settings::Sync::set_string("api_key", &api_key);
     }
 }
 
