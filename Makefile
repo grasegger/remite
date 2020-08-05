@@ -2,6 +2,8 @@ SHELL = /bin/bash
 .PHONY: extension dockershell structure in-docker Dockerfile package.json
 
 extension: packages package.json clean
+	touch manifest.yml
+	touch icon.svg
 	cargo build
 	cp node_modules/milligram/dist/milligram.min.css build/lib/milligram.css
 
@@ -12,9 +14,8 @@ clean:
 	cd build && git clean -fxd
 
 packages: clean
-	wasm-pack build --target no-modules --no-typescript  --release -d ../../build/background/ --out-name background packages/remite-background
-	wasm-pack build --target no-modules --no-typescript  --release -d ../../build/options/ --out-name options packages/remite-options
-
+	wasm-pack build --target no-modules --no-typescript -d ../../build/background/ --out-name background packages/remite-background
+	wasm-pack build --target no-modules --no-typescript -d ../../build/options/ --out-name options packages/remite-options
 
 Dockerfile:
 	docker build -t remite .

@@ -1,17 +1,24 @@
-use yew::prelude::*;
 use wasm_bindgen::prelude::*;
+use yew::prelude::*;
 use yew::web_sys::console;
-use yew::web_sys::window;
+use yew::web_sys::HtmlInputElement;
 use yew::MouseEvent;
+use browser_storage_sync as settings;
+use futures::executor::LocalPool;
+use futures::task::LocalSpawnExt;
+use std::panic;
 
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
+console_error_panic_hook::set_once();
 
 struct Model {
     link: ComponentLink<Self>,
     mite_instance: String,
     mite_api_key: String,
+    instance_ref: NodeRef,
+    apikey_ref: NodeRef,
 }
 
 enum Msg {
@@ -20,14 +27,30 @@ enum Msg {
 
 impl Model {
     fn save_changes(&mut self) {
-        let document = window().unwrap().document().unwrap();
-
-        let instance_element = document.query_selector("input#instanceField").unwrap().unwrap();
-        let instance_attributes = instance_element;
-        console::log_1(&format!("{:?}", instance_attributes).into());
         console::log_1(&"Saving changes.".into());
-        console::log_1(&self.mite_api_key.clone().into());
-        console::log_1(&self.mite_instance.clone().into());
+        let instance = self.instance_ref
+            .cast::<HtmlInputElement>()
+            .unwrap()
+            .value();
+
+        let mut executor = LocalPool::new();
+        let spawner = executor.spawner();
+
+        let future = async move {
+            settings::set_string("instance", &instance.clone()).await.unwrap();
+        };
+
+        spawner.spawn_local(future).unwrap();
+
+        executor.run();
+
+        let api_key = self.apikey_ref
+            .cast::<HtmlInputElement>()
+            .unwrap()
+            .value();
+
+        
+
     }
 }
 
@@ -40,16 +63,17 @@ impl Component for Model {
             link,
             mite_instance: "".to_string(),
             mite_api_key: "".to_string(),
+            instance_ref: NodeRef::default(),
+            apikey_ref: NodeRef::default(),
         }
     }
 
-
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
-            Msg::ClickSave (mouse_event) => {
-			    mouse_event.prevent_default();
-			    self.save_changes()
-		    }
+            Msg::ClickSave(mouse_event) => {
+                mouse_event.prevent_default();
+                self.save_changes()
+            }
         }
         true
     }
@@ -64,10 +88,9 @@ impl Component for Model {
                 <form>
                     <fieldset>
                         <label for="instanceField">{"Your mite instance."}</label>
-                        <input type="text" id="instanceField" />
-                        
+                        <input type="text" id="instanceField" ref={self.instance_ref.clone()}  />
                         <label for="instanceField">{"Your mite api key."}</label>
-                        <input type="text" id="apiKeyField" />
+                        <input type="text" id="apiKeyField" ref={self.apikey_ref.clone()}  />
 
                         <button onclick=self.link.callback(|event| Msg::ClickSave(event))>{ "Save" }</button>
                     </fieldset>
