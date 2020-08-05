@@ -2,7 +2,7 @@ SHELL = /bin/bash
 .PHONY: extension dockershell structure in-docker Dockerfile package.json
 
 extension: packages package.json clean
-	touch manifest.yml
+	touch manifest.yaml
 	touch icon.svg
 	cargo build
 	cp node_modules/milligram/dist/milligram.min.css build/lib/milligram.css
